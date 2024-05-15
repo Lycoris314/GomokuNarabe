@@ -208,6 +208,18 @@ export class GomokuNarabe {
         for (let elm of box) {
             let [i, j] = [elm[0], elm[1]];
             let field = structuredClone(this.#field);
+            field[i][j] = this.getOpponentTurn();
+            const gsa = this.getStoneArray(i, j, field, this.getOpponentTurn());
+
+            let idx = gsa.counts.findIndex((e) => e == 2);
+            if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+                return [i - 1, j - 1];
+            }
+        }
+
+        for (let elm of box) {
+            let [i, j] = [elm[0], elm[1]];
+            let field = structuredClone(this.#field);
             field[i][j] = this.turn;
             const gsa = this.getStoneArray(i, j, field, this.turn);
             let idx2 = gsa.counts.findIndex((e) => e == 1);

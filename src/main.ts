@@ -1,6 +1,6 @@
 //npm i --save-dev @types/jquery でjqueryの型導入
 import $ from "jquery";
-import { GomokuNarabe } from "./gomoku";
+import { GomokuNarabe } from "./gomoku"; //./は省略できない
 import { GAME_STATE, STONE } from "./global";
 
 $(() => {

@@ -379,13 +379,28 @@ var GomokuNarabe = /** @class */function () {
         return [i_9 - 1, j_9 - 1];
       }
     }
+    for (var _r = 0, box_9 = box; _r < box_9.length; _r++) {
+      var elm = box_9[_r];
+      var _s = [elm[0], elm[1]],
+        i_10 = _s[0],
+        j_10 = _s[1];
+      var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
+      field[i_10][j_10] = this.getOpponentTurn();
+      var gsa = this.getStoneArray(i_10, j_10, field, this.getOpponentTurn());
+      var idx = gsa.counts.findIndex(function (e) {
+        return e == 2;
+      });
+      if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+        return [i_10 - 1, j_10 - 1];
+      }
+    }
     var _loop_1 = function _loop_1(elm) {
-      var _t = [elm[0], elm[1]],
-        i_10 = _t[0],
-        j_10 = _t[1];
+      var _v = [elm[0], elm[1]],
+        i_11 = _v[0],
+        j_11 = _v[1];
       var field = structuredClone(__classPrivateFieldGet(this_1, _GomokuNarabe_field, "f"));
-      field[i_10][j_10] = this_1.turn;
-      var gsa = this_1.getStoneArray(i_10, j_10, field, this_1.turn);
+      field[i_11][j_11] = this_1.turn;
+      var gsa = this_1.getStoneArray(i_11, j_11, field, this_1.turn);
       var idx2 = gsa.counts.findIndex(function (e) {
         return e == 1;
       });
@@ -394,20 +409,20 @@ var GomokuNarabe = /** @class */function () {
       });
       if (idx2 >= 0 && gsa.noneEnds[idx2] == 2 && idx3 >= 0 && gsa.noneEnds[idx3] == 2) {
         return {
-          value: [i_10 - 1, j_10 - 1]
+          value: [i_11 - 1, j_11 - 1]
         };
       }
     };
     var this_1 = this;
-    for (var _r = 0, box_9 = box; _r < box_9.length; _r++) {
-      var elm = box_9[_r];
+    for (var _t = 0, box_10 = box; _t < box_10.length; _t++) {
+      var elm = box_10[_t];
       var state_1 = _loop_1(elm);
       if (_typeof(state_1) === "object") return state_1.value;
     }
     var midIndex = Math.floor(box.length / 2);
-    var _s = [box[midIndex][0], box[midIndex][1]],
-      i = _s[0],
-      j = _s[1];
+    var _u = [box[midIndex][0], box[midIndex][1]],
+      i = _u[0],
+      j = _u[1];
     return [i - 1, j - 1];
   };
   //横方向、縦方向、斜め方向×2　の４方向について同種の石が連続している数およびその両端が空マスである数を計算してリストにして返す。
@@ -478,7 +493,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62873" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50160" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
