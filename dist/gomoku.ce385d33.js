@@ -289,10 +289,7 @@ var GomokuNarabe = /** @class */function () {
       var idx = gsa.counts.findIndex(function (e) {
         return e == 3;
       });
-      if (idx >= 0 && gsa.noneEnds[idx] > 0) {
-        if (gsa.noneEnds[idx] == 1 && Math.random() < 0.5) {
-          continue;
-        }
+      if (idx >= 0 && gsa.noneEnds[idx] == 2) {
         return [i_4 - 1, j_4 - 1];
       }
     }
@@ -302,12 +299,15 @@ var GomokuNarabe = /** @class */function () {
         i_5 = _g[0],
         j_5 = _g[1];
       var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
-      field[i_5][j_5] = this.getOpponentTurn();
-      var gsa = this.getStoneArray(i_5, j_5, field, this.getOpponentTurn());
+      field[i_5][j_5] = this.turn;
+      var gsa = this.getStoneArray(i_5, j_5, field, this.turn);
       var idx = gsa.counts.findIndex(function (e) {
         return e == 3;
       });
-      if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+      var idx2 = gsa.counts.findIndex(function (e) {
+        return e == 2;
+      });
+      if (idx >= 0 && gsa.noneEnds[idx] == 1 && idx2 >= 0 && gsa.noneEnds[idx2] == 2) {
         return [i_5 - 1, j_5 - 1];
       }
     }
@@ -320,19 +320,72 @@ var GomokuNarabe = /** @class */function () {
       field[i_6][j_6] = this.turn;
       var gsa = this.getStoneArray(i_6, j_6, field, this.turn);
       var idx = gsa.counts.findIndex(function (e) {
-        return e == 2;
+        return e == 3;
       });
-      if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+      if (idx >= 0 && gsa.noneEnds[idx] == 1) {
+        if (Math.random() < 0.5) {
+          continue;
+        }
         return [i_6 - 1, j_6 - 1];
       }
     }
+    //相手の4連を封じる
+    for (var _k = 0, box_6 = box; _k < box_6.length; _k++) {
+      var elm = box_6[_k];
+      var _l = [elm[0], elm[1]],
+        i_7 = _l[0],
+        j_7 = _l[1];
+      var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
+      field[i_7][j_7] = this.getOpponentTurn();
+      var gsa = this.getStoneArray(i_7, j_7, field, this.getOpponentTurn());
+      var idx = gsa.counts.findIndex(function (e) {
+        return e == 3;
+      });
+      if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+        return [i_7 - 1, j_7 - 1];
+      }
+    }
+    //相手の4-3を封じる
+    for (var _m = 0, box_7 = box; _m < box_7.length; _m++) {
+      var elm = box_7[_m];
+      var _o = [elm[0], elm[1]],
+        i_8 = _o[0],
+        j_8 = _o[1];
+      var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
+      field[i_8][j_8] = this.getOpponentTurn();
+      var gsa = this.getStoneArray(i_8, j_8, field, this.getOpponentTurn());
+      var idx = gsa.counts.findIndex(function (e) {
+        return e == 3;
+      });
+      var idx2 = gsa.counts.findIndex(function (e) {
+        return e == 2;
+      });
+      if (idx >= 0 && gsa.noneEnds[idx] == 1 && idx2 >= 0 && gsa.noneEnds[idx2] == 2) {
+        return [i_8 - 1, j_8 - 1];
+      }
+    }
+    for (var _p = 0, box_8 = box; _p < box_8.length; _p++) {
+      var elm = box_8[_p];
+      var _q = [elm[0], elm[1]],
+        i_9 = _q[0],
+        j_9 = _q[1];
+      var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
+      field[i_9][j_9] = this.turn;
+      var gsa = this.getStoneArray(i_9, j_9, field, this.turn);
+      var idx = gsa.counts.findIndex(function (e) {
+        return e == 2;
+      });
+      if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+        return [i_9 - 1, j_9 - 1];
+      }
+    }
     var _loop_1 = function _loop_1(elm) {
-      var _m = [elm[0], elm[1]],
-        i_7 = _m[0],
-        j_7 = _m[1];
+      var _t = [elm[0], elm[1]],
+        i_10 = _t[0],
+        j_10 = _t[1];
       var field = structuredClone(__classPrivateFieldGet(this_1, _GomokuNarabe_field, "f"));
-      field[i_7][j_7] = this_1.turn;
-      var gsa = this_1.getStoneArray(i_7, j_7, field, this_1.turn);
+      field[i_10][j_10] = this_1.turn;
+      var gsa = this_1.getStoneArray(i_10, j_10, field, this_1.turn);
       var idx2 = gsa.counts.findIndex(function (e) {
         return e == 1;
       });
@@ -341,20 +394,20 @@ var GomokuNarabe = /** @class */function () {
       });
       if (idx2 >= 0 && gsa.noneEnds[idx2] == 2 && idx3 >= 0 && gsa.noneEnds[idx3] == 2) {
         return {
-          value: [i_7 - 1, j_7 - 1]
+          value: [i_10 - 1, j_10 - 1]
         };
       }
     };
     var this_1 = this;
-    for (var _k = 0, box_6 = box; _k < box_6.length; _k++) {
-      var elm = box_6[_k];
+    for (var _r = 0, box_9 = box; _r < box_9.length; _r++) {
+      var elm = box_9[_r];
       var state_1 = _loop_1(elm);
       if (_typeof(state_1) === "object") return state_1.value;
     }
     var midIndex = Math.floor(box.length / 2);
-    var _l = [box[midIndex][0], box[midIndex][1]],
-      i = _l[0],
-      j = _l[1];
+    var _s = [box[midIndex][0], box[midIndex][1]],
+      i = _s[0],
+      j = _s[1];
     return [i - 1, j - 1];
   };
   //横方向、縦方向、斜め方向×2　の４方向について同種の石が連続している数およびその両端が空マスである数を計算してリストにして返す。

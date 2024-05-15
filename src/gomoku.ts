@@ -128,10 +128,7 @@ export class GomokuNarabe {
             field[i][j] = this.turn;
             const gsa = this.getStoneArray(i, j, field, this.turn);
             let idx = gsa.counts.findIndex((e) => e == 3);
-            if (idx >= 0 && gsa.noneEnds[idx] > 0) {
-                if (gsa.noneEnds[idx] == 1 && Math.random() < 0.5) {
-                    continue;
-                }
+            if (idx >= 0 && gsa.noneEnds[idx] == 2) {
                 return [i - 1, j - 1];
             }
         }
@@ -139,10 +136,59 @@ export class GomokuNarabe {
         for (let elm of box) {
             let [i, j] = [elm[0], elm[1]];
             let field = structuredClone(this.#field);
+            field[i][j] = this.turn;
+            const gsa = this.getStoneArray(i, j, field, this.turn);
+            let idx = gsa.counts.findIndex((e) => e == 3);
+            let idx2 = gsa.counts.findIndex((e) => e == 2);
+            if (
+                idx >= 0 &&
+                gsa.noneEnds[idx] == 1 &&
+                idx2 >= 0 &&
+                gsa.noneEnds[idx2] == 2
+            ) {
+                return [i - 1, j - 1];
+            }
+        }
+
+        for (let elm of box) {
+            let [i, j] = [elm[0], elm[1]];
+            let field = structuredClone(this.#field);
+            field[i][j] = this.turn;
+            const gsa = this.getStoneArray(i, j, field, this.turn);
+            let idx = gsa.counts.findIndex((e) => e == 3);
+            if (idx >= 0 && gsa.noneEnds[idx] == 1) {
+                if (Math.random() < 0.5) {
+                    continue;
+                }
+                return [i - 1, j - 1];
+            }
+        }
+
+        //相手の4連を封じる
+        for (let elm of box) {
+            let [i, j] = [elm[0], elm[1]];
+            let field = structuredClone(this.#field);
             field[i][j] = this.getOpponentTurn();
             const gsa = this.getStoneArray(i, j, field, this.getOpponentTurn());
             let idx = gsa.counts.findIndex((e) => e == 3);
             if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+                return [i - 1, j - 1];
+            }
+        }
+        //相手の4-3を封じる
+        for (let elm of box) {
+            let [i, j] = [elm[0], elm[1]];
+            let field = structuredClone(this.#field);
+            field[i][j] = this.getOpponentTurn();
+            const gsa = this.getStoneArray(i, j, field, this.getOpponentTurn());
+            let idx = gsa.counts.findIndex((e) => e == 3);
+            let idx2 = gsa.counts.findIndex((e) => e == 2);
+            if (
+                idx >= 0 &&
+                gsa.noneEnds[idx] == 1 &&
+                idx2 >= 0 &&
+                gsa.noneEnds[idx2] == 2
+            ) {
                 return [i - 1, j - 1];
             }
         }

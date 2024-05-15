@@ -95,6 +95,7 @@ $(() => {
                     let [y, x] = gomoku.comNext();
                     const st = gomoku.putStone(y + 1, x + 1);
                     const td = $(`td.cross[data-y='${y}'][data-x='${x}']`);
+
                     $("td.cross").removeClass("shadow");
                     if (gomoku.turn == STONE.FIRST) {
                         td.addClass("white shadow");
@@ -128,9 +129,12 @@ $(() => {
         reset(gomoku.size);
         comBattle = true;
         $("div.config").removeClass("show");
+
         const center = (gomoku.size - 1) / 2;
         gomoku.putStone(center + 1, center + 1);
-        $(`td.cross[data-y=${center}][data-x=${center}]`).addClass("black");
+        $(`td.cross[data-y=${center}][data-x=${center}]`).addClass(
+            "black shadow"
+        );
         $("p.turn").text("白の番です。");
     });
 
@@ -138,6 +142,7 @@ $(() => {
     $("#size19").on("change", () => {
         $("table.cross").empty();
         $("table.masu").empty();
+
         makeTable(19);
         $("td.cross").on("click", tdClickEvent);
         $("table.masu").removeClass("size11 size15");
@@ -147,6 +152,7 @@ $(() => {
     $("#size15").on("change", () => {
         $("table.cross").empty();
         $("table.masu").empty();
+
         makeTable(15);
         $("td.cross").on("click", tdClickEvent);
         $("table.masu").addClass("size15");
@@ -157,6 +163,7 @@ $(() => {
     $("#size11").on("change", () => {
         $("table.cross").empty();
         $("table.masu").empty();
+
         makeTable(11);
         $("td.cross").on("click", tdClickEvent);
         $("table.masu").removeClass("size15");
@@ -171,7 +178,7 @@ $(() => {
 
     function reset(n: number) {
         gomoku = new GomokuNarabe(n);
-        $("td.cross").removeClass("black white");
+        $("td.cross").removeClass("black white shadow");
         $("p.turn").text("黒の番です。");
         inGame = true;
     }
