@@ -1,0 +1,5 @@
+https://qiita.com/hwatry/items/c911b829581e36b3c8a2
+https://reffect.co.jp/html/npm-package-manager-basic-for-beginner
+https://ics.media/entry/190325/
+
+npx parcel src/index.html --open

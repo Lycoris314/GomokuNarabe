@@ -1,0 +1,178 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(251, 251, 238);
+}
+
+button {
+    cursor: pointer;
+}
+
+div.config {
+    position: fixed;
+    background-color: rgb(0, 0, 0, 0.2);
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    top: 100%;
+    transition: 0.3s;
+}
+div.config.show {
+    top: 0;
+}
+
+div.config > .content {
+    margin: 5% auto;
+    width: 70%;
+    height: 80%;
+    background-color: white;
+}
+
+.content > .back {
+    display: block;
+    margin: 50px auto;
+    padding: 5px 20px;
+    color: white;
+    background-color: darkgreen;
+    border-radius: 10px;
+}
+
+.content > p {
+    text-align: center;
+    padding: 20px 0 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.content > .btns {
+    display: flex;
+    gap: 30px;
+}
+
+.btns > .first {
+    width: 200px;
+    color: white;
+    background-color: black;
+}
+.btns > .second {
+    width: 200px;
+    color: black;
+    background-color: white;
+}
+
+.radios {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    margin: 0;
+    padding: 5px;
+    font-size: 1.8rem;
+}
+
+p.turn {
+    text-align: center;
+    margin: 5px;
+}
+
+.field {
+    position: relative;
+    width: min(70%, 70vh);
+    margin: 0 auto;
+    padding: 1px;
+    aspect-ratio: 1/1;
+    background-color: blanchedalmond;
+}
+
+table.masu {
+    position: absolute;
+    margin: 5%;
+    width: 90%;
+    height: 90%;
+    border-collapse: collapse;
+}
+
+table.masu.size15 {
+    width: calc(95% * 14 / 15);
+    height: calc(95% * 14 / 15);
+    margin: calc(50% - 95% * 7 / 15);
+}
+
+table.masu.size11 {
+    width: calc(95% * 10 / 11);
+    height: calc(95% * 10 / 11);
+    margin: calc(50% - 95% * 5 / 11);
+}
+
+td.masu {
+    border: 1px solid black;
+}
+
+table.cross {
+    position: absolute;
+    z-index: 2;
+    top: -2.5%;
+    left: -2.5%;
+    margin: 5%;
+    width: 95%;
+    height: 95%;
+    border-spacing: 0px;
+}
+
+td.cross {
+    border-radius: 50%;
+    transition: 0.2s;
+    cursor: pointer;
+}
+td.cross:hover {
+    background-color: rgb(206, 206, 206, 0.5);
+}
+td.cross.black {
+    background-color: black;
+    cursor: auto;
+}
+td.cross.shadow,
+td.cross.shadow {
+    box-shadow: inset 0 0 3px 3px silver;
+}
+
+td.cross.white {
+    background-color: white;
+    cursor: auto;
+}
+
+div.btns {
+    display: flex;
+    gap: 10px;
+    width: min(40%, 200px);
+    margin: 10px auto;
+}
+
+button.reset {
+    display: block;
+    width: 80px;
+    margin: 10px auto;
+    color: white;
+    background-color: rgb(247, 89, 121);
+    border-radius: 15px;
+    border: none;
+    padding: 5px 10px;
+}
+button.reset:active,
+button.config:active {
+    background-color: crimson;
+}
+
+button.config {
+    display: block;
+    width: 80px;
+    margin: 10px auto;
+    color: white;
+    background-color: rgb(247, 89, 121);
+    border-radius: 15px;
+    border: none;
+    padding: 5px 10px;
+}
+
+/*# sourceMappingURL=index.css.map */
