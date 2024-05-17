@@ -90,17 +90,17 @@ export class GomokuNarabe {
     //COMの次の一手
     comNext() {
         //boxには空のマスのリストを入れる
-        let box: number[] | [] = [];
+        let box: [number, number][] = [];
         for (let i = 1; i <= this.#size; i++) {
             for (let j = 1; j <= this.#size; j++) {
                 if (this.#field[i][j] == STONE.NONE) {
-                    box.push([i, j] as never);
+                    box.push([i, j]);
                 }
             }
         }
 
         for (let elm of box) {
-            let [i, j] = [elm[0], elm[1]];
+            let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.turn;
             if (
@@ -111,7 +111,7 @@ export class GomokuNarabe {
         }
 
         for (let elm of box) {
-            let [i, j] = [elm[0], elm[1]];
+            let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.getOpponentTurn();
             if (
@@ -123,23 +123,23 @@ export class GomokuNarabe {
         }
 
         for (let elm of box) {
-            let [i, j] = [elm[0], elm[1]];
+            let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.turn;
             const gsa = this.getStoneArray(i, j, field, this.turn);
-            let idx = gsa.counts.findIndex((e) => e == 3);
-            if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+            let idx = gsa.counts.findIndex((e) => e === 3);
+            if (idx >= 0 && gsa.noneEnds[idx] === 2) {
                 return [i - 1, j - 1];
             }
         }
 
         for (let elm of box) {
-            let [i, j] = [elm[0], elm[1]];
+            let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.turn;
             const gsa = this.getStoneArray(i, j, field, this.turn);
-            let idx = gsa.counts.findIndex((e) => e == 3);
-            let idx2 = gsa.counts.findIndex((e) => e == 2);
+            let idx = gsa.counts.findIndex((e) => e === 3);
+            let idx2 = gsa.counts.findIndex((e) => e === 2);
             if (
                 idx >= 0 &&
                 gsa.noneEnds[idx] == 1 &&
@@ -151,12 +151,12 @@ export class GomokuNarabe {
         }
 
         for (let elm of box) {
-            let [i, j] = [elm[0], elm[1]];
+            let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.turn;
             const gsa = this.getStoneArray(i, j, field, this.turn);
-            let idx = gsa.counts.findIndex((e) => e == 3);
-            if (idx >= 0 && gsa.noneEnds[idx] == 1) {
+            let idx = gsa.counts.findIndex((e) => e === 3);
+            if (idx >= 0 && gsa.noneEnds[idx] === 1) {
                 if (Math.random() < 0.5) {
                     continue;
                 }
@@ -166,18 +166,18 @@ export class GomokuNarabe {
 
         //相手の4連を封じる
         for (let elm of box) {
-            let [i, j] = [elm[0], elm[1]];
+            let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.getOpponentTurn();
             const gsa = this.getStoneArray(i, j, field, this.getOpponentTurn());
-            let idx = gsa.counts.findIndex((e) => e == 3);
-            if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+            let idx = gsa.counts.findIndex((e) => e === 3);
+            if (idx >= 0 && gsa.noneEnds[idx] === 2) {
                 return [i - 1, j - 1];
             }
         }
         //相手の4-3を封じる
         for (let elm of box) {
-            let [i, j] = [elm[0], elm[1]];
+            let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.getOpponentTurn();
             const gsa = this.getStoneArray(i, j, field, this.getOpponentTurn());
@@ -194,7 +194,7 @@ export class GomokuNarabe {
         }
 
         for (let elm of box) {
-            let [i, j] = [elm[0], elm[1]];
+            let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.turn;
             const gsa = this.getStoneArray(i, j, field, this.turn);
@@ -206,7 +206,7 @@ export class GomokuNarabe {
         }
 
         for (let elm of box) {
-            let [i, j] = [elm[0], elm[1]];
+            let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.getOpponentTurn();
             const gsa = this.getStoneArray(i, j, field, this.getOpponentTurn());
@@ -218,7 +218,7 @@ export class GomokuNarabe {
         }
 
         for (let elm of box) {
-            let [i, j] = [elm[0], elm[1]];
+            let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.turn;
             const gsa = this.getStoneArray(i, j, field, this.turn);
@@ -234,38 +234,32 @@ export class GomokuNarabe {
             }
         }
 
+        //上記すべてに当てはまらない場合に空いているマスにテキトウに打つ
         let midIndex = Math.floor(box.length / 2);
-        let [i, j] = [box[midIndex][0], box[midIndex][1]];
+        let [i, j] = box[midIndex];
         return [i - 1, j - 1];
     }
 
     //横方向、縦方向、斜め方向×2　の４方向について同種の石が連続している数およびその両端が空マスである数を計算してリストにして返す。
     getStoneArray(r: number, c: number, field: number[][], turn: number) {
-        let countBox = [];
-        let noneEndBox = [];
-        countBox.push(
-            (countStone([0, 1]).count + countStone([0, -1]).count) as never
-        );
+        let countBox: number[] = [];
+        let noneEndBox: number[] = [];
+
+        countBox.push(countStone([0, 1]).count + countStone([0, -1]).count);
         noneEndBox.push(
-            (countStone([0, 1]).noneEnd + countStone([0, -1]).noneEnd) as never
+            countStone([0, 1]).noneEnd + countStone([0, -1]).noneEnd
         );
-        countBox.push(
-            (countStone([1, 0]).count + countStone([-1, 0]).count) as never
-        );
+        countBox.push(countStone([1, 0]).count + countStone([-1, 0]).count);
         noneEndBox.push(
-            (countStone([1, 0]).noneEnd + countStone([-1, 0]).noneEnd) as never
+            countStone([1, 0]).noneEnd + countStone([-1, 0]).noneEnd
         );
-        countBox.push(
-            (countStone([1, 1]).count + countStone([-1, -1]).count) as never
-        );
+        countBox.push(countStone([1, 1]).count + countStone([-1, -1]).count);
         noneEndBox.push(
-            (countStone([1, 1]).noneEnd + countStone([-1, -1]).noneEnd) as never
+            countStone([1, 1]).noneEnd + countStone([-1, -1]).noneEnd
         );
-        countBox.push(
-            (countStone([1, -1]).count + countStone([-1, 1]).count) as never
-        );
+        countBox.push(countStone([1, -1]).count + countStone([-1, 1]).count);
         noneEndBox.push(
-            (countStone([1, -1]).noneEnd + countStone([-1, 1]).noneEnd) as never
+            countStone([1, -1]).noneEnd + countStone([-1, 1]).noneEnd
         );
 
         return { counts: countBox, noneEnds: noneEndBox };
