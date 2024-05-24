@@ -4,3 +4,5 @@ https://ics.media/entry/190325/
 
 npx parcel src/index.html --open
 npx parcel build src/index.html
+以下でbuildしないといけない。
+npx parcel build src/index.html --public-url https://lycoris314.github.io/GomokuNarabe-dist-/
