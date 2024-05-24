@@ -11153,73 +11153,88 @@ var GomokuNarabe = /** @class */function () {
         }
       }
     }
+    //置くとそのまま勝つ所があるならそこに置く
     for (var _i = 0, box_1 = box; _i < box_1.length; _i++) {
       var elm = box_1[_i];
-      var _a = [elm[0], elm[1]],
-        i_2 = _a[0],
-        j_2 = _a[1];
+      var i_2 = elm[0],
+        j_2 = elm[1];
       var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
       field[i_2][j_2] = this.turn;
       if (this.checkGameState(i_2, j_2, field, this.turn) === global_1.GAME_STATE.WIN) {
         return [i_2 - 1, j_2 - 1];
       }
     }
-    for (var _b = 0, box_2 = box; _b < box_2.length; _b++) {
-      var elm = box_2[_b];
-      var _c = [elm[0], elm[1]],
-        i_3 = _c[0],
-        j_3 = _c[1];
+    //置かれると負ける所があるならそこに置く
+    for (var _a = 0, box_2 = box; _a < box_2.length; _a++) {
+      var elm = box_2[_a];
+      var i_3 = elm[0],
+        j_3 = elm[1];
       var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
       field[i_3][j_3] = this.getOpponentTurn();
       if (this.checkGameState(i_3, j_3, field, this.getOpponentTurn()) === global_1.GAME_STATE.WIN) {
         return [i_3 - 1, j_3 - 1];
       }
     }
-    for (var _d = 0, box_3 = box; _d < box_3.length; _d++) {
-      var elm = box_3[_d];
-      var _e = [elm[0], elm[1]],
-        i_4 = _e[0],
-        j_4 = _e[1];
+    //両端が空いた４連を作る
+    for (var _b = 0, box_3 = box; _b < box_3.length; _b++) {
+      var elm = box_3[_b];
+      var i_4 = elm[0],
+        j_4 = elm[1];
       var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
       field[i_4][j_4] = this.turn;
       var gsa = this.getStoneArray(i_4, j_4, field, this.turn);
       var idx = gsa.counts.findIndex(function (e) {
-        return e == 3;
+        return e === 3;
       });
-      if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+      if (idx >= 0 && gsa.noneEnds[idx] === 2) {
         return [i_4 - 1, j_4 - 1];
       }
     }
-    for (var _f = 0, box_4 = box; _f < box_4.length; _f++) {
-      var elm = box_4[_f];
-      var _g = [elm[0], elm[1]],
-        i_5 = _g[0],
-        j_5 = _g[1];
-      var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
-      field[i_5][j_5] = this.turn;
-      var gsa = this.getStoneArray(i_5, j_5, field, this.turn);
+    var _loop_1 = function _loop_1(elm) {
+      var i_5 = elm[0],
+        j_5 = elm[1];
+      var field = structuredClone(__classPrivateFieldGet(this_1, _GomokuNarabe_field, "f"));
+      field[i_5][j_5] = this_1.turn;
+      var gsa = this_1.getStoneArray(i_5, j_5, field, this_1.turn);
       var idx = gsa.counts.findIndex(function (e) {
-        return e == 3;
+        return e === 3;
       });
       var idx2 = gsa.counts.findIndex(function (e) {
-        return e == 2;
+        return e === 2;
+      });
+      var idx3 = gsa.counts.findIndex(function (e, i) {
+        return e === 3 && i > idx;
       });
       if (idx >= 0 && gsa.noneEnds[idx] == 1 && idx2 >= 0 && gsa.noneEnds[idx2] == 2) {
-        return [i_5 - 1, j_5 - 1];
+        return {
+          value: [i_5 - 1, j_5 - 1]
+        };
       }
+      if (idx >= 0 && gsa.noneEnds[idx] == 1 && idx3 >= 0 && gsa.noneEnds[idx3] == 1) {
+        return {
+          value: [i_5 - 1, j_5 - 1]
+        };
+      }
+    };
+    var this_1 = this;
+    //4-3,4-4を作る
+    for (var _c = 0, box_4 = box; _c < box_4.length; _c++) {
+      var elm = box_4[_c];
+      var state_1 = _loop_1(elm);
+      if (_typeof(state_1) === "object") return state_1.value;
     }
-    for (var _h = 0, box_5 = box; _h < box_5.length; _h++) {
-      var elm = box_5[_h];
-      var _j = [elm[0], elm[1]],
-        i_6 = _j[0],
-        j_6 = _j[1];
+    //片方空いた4連を50%の確率作る。
+    for (var _d = 0, box_5 = box; _d < box_5.length; _d++) {
+      var elm = box_5[_d];
+      var i_6 = elm[0],
+        j_6 = elm[1];
       var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
       field[i_6][j_6] = this.turn;
       var gsa = this.getStoneArray(i_6, j_6, field, this.turn);
       var idx = gsa.counts.findIndex(function (e) {
-        return e == 3;
+        return e === 3;
       });
-      if (idx >= 0 && gsa.noneEnds[idx] == 1) {
+      if (idx >= 0 && gsa.noneEnds[idx] === 1) {
         if (Math.random() < 0.5) {
           continue;
         }
@@ -11227,63 +11242,86 @@ var GomokuNarabe = /** @class */function () {
       }
     }
     //相手の4連を封じる
-    for (var _k = 0, box_6 = box; _k < box_6.length; _k++) {
-      var elm = box_6[_k];
-      var _l = [elm[0], elm[1]],
-        i_7 = _l[0],
-        j_7 = _l[1];
+    for (var _e = 0, box_6 = box; _e < box_6.length; _e++) {
+      var elm = box_6[_e];
+      var i_7 = elm[0],
+        j_7 = elm[1];
       var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
       field[i_7][j_7] = this.getOpponentTurn();
       var gsa = this.getStoneArray(i_7, j_7, field, this.getOpponentTurn());
       var idx = gsa.counts.findIndex(function (e) {
-        return e == 3;
+        return e === 3;
       });
-      if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+      if (idx >= 0 && gsa.noneEnds[idx] === 2) {
         return [i_7 - 1, j_7 - 1];
       }
     }
-    //相手の4-3を封じる
-    for (var _m = 0, box_7 = box; _m < box_7.length; _m++) {
-      var elm = box_7[_m];
-      var _o = [elm[0], elm[1]],
-        i_8 = _o[0],
-        j_8 = _o[1];
-      var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
-      field[i_8][j_8] = this.getOpponentTurn();
-      var gsa = this.getStoneArray(i_8, j_8, field, this.getOpponentTurn());
+    var _loop_2 = function _loop_2(elm) {
+      var i_8 = elm[0],
+        j_8 = elm[1];
+      var field = structuredClone(__classPrivateFieldGet(this_2, _GomokuNarabe_field, "f"));
+      field[i_8][j_8] = this_2.getOpponentTurn();
+      var gsa = this_2.getStoneArray(i_8, j_8, field, this_2.getOpponentTurn());
       var idx = gsa.counts.findIndex(function (e) {
         return e == 3;
       });
       var idx2 = gsa.counts.findIndex(function (e) {
         return e == 2;
       });
+      var idx3 = gsa.counts.findIndex(function (e, i) {
+        return e === 3 && i > idx;
+      });
       if (idx >= 0 && gsa.noneEnds[idx] == 1 && idx2 >= 0 && gsa.noneEnds[idx2] == 2) {
-        return [i_8 - 1, j_8 - 1];
+        return {
+          value: [i_8 - 1, j_8 - 1]
+        };
       }
+      if (idx >= 0 && gsa.noneEnds[idx] == 1 && idx3 >= 0 && gsa.noneEnds[idx3] == 1) {
+        return {
+          value: [i_8 - 1, j_8 - 1]
+        };
+      }
+    };
+    var this_2 = this;
+    //相手の4-3,4-4を封じる
+    for (var _f = 0, box_7 = box; _f < box_7.length; _f++) {
+      var elm = box_7[_f];
+      var state_2 = _loop_2(elm);
+      if (_typeof(state_2) === "object") return state_2.value;
     }
-    for (var _p = 0, box_8 = box; _p < box_8.length; _p++) {
-      var elm = box_8[_p];
-      var _q = [elm[0], elm[1]],
-        i_9 = _q[0],
-        j_9 = _q[1];
-      var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
-      field[i_9][j_9] = this.turn;
-      var gsa = this.getStoneArray(i_9, j_9, field, this.turn);
+    var _loop_3 = function _loop_3(elm) {
+      var i_9 = elm[0],
+        j_9 = elm[1];
+      var field = structuredClone(__classPrivateFieldGet(this_3, _GomokuNarabe_field, "f"));
+      field[i_9][j_9] = this_3.turn;
+      var gsa = this_3.getStoneArray(i_9, j_9, field, this_3.turn);
       var idx = gsa.counts.findIndex(function (e) {
         return e == 2;
       });
-      if (idx >= 0 && gsa.noneEnds[idx] == 2) {
-        return [i_9 - 1, j_9 - 1];
+      var idx2 = gsa.counts.findIndex(function (e, i) {
+        return e == 2 && i > idx;
+      });
+      if (idx >= 0 && gsa.noneEnds[idx] == 2 && idx2 >= 0 && gsa.noneEnds[idx2] == 2) {
+        return {
+          value: [i_9 - 1, j_9 - 1]
+        };
       }
+    };
+    var this_3 = this;
+    //3-3を作る
+    for (var _g = 0, box_8 = box; _g < box_8.length; _g++) {
+      var elm = box_8[_g];
+      var state_3 = _loop_3(elm);
+      if (_typeof(state_3) === "object") return state_3.value;
     }
-    for (var _r = 0, box_9 = box; _r < box_9.length; _r++) {
-      var elm = box_9[_r];
-      var _s = [elm[0], elm[1]],
-        i_10 = _s[0],
-        j_10 = _s[1];
+    //3を作る
+    for (var _h = 0, box_9 = box; _h < box_9.length; _h++) {
+      var elm = box_9[_h];
+      var i_10 = elm[0],
+        j_10 = elm[1];
       var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
-      field[i_10][j_10] = this.getOpponentTurn();
-      var gsa = this.getStoneArray(i_10, j_10, field, this.getOpponentTurn());
+      field[i_10][j_10] = this.turn;
+      var gsa = this.getStoneArray(i_10, j_10, field, this.turn);
       var idx = gsa.counts.findIndex(function (e) {
         return e == 2;
       });
@@ -11291,35 +11329,59 @@ var GomokuNarabe = /** @class */function () {
         return [i_10 - 1, j_10 - 1];
       }
     }
-    var _loop_1 = function _loop_1(elm) {
-      var _v = [elm[0], elm[1]],
-        i_11 = _v[0],
-        j_11 = _v[1];
-      var field = structuredClone(__classPrivateFieldGet(this_1, _GomokuNarabe_field, "f"));
-      field[i_11][j_11] = this_1.turn;
-      var gsa = this_1.getStoneArray(i_11, j_11, field, this_1.turn);
-      var idx2 = gsa.counts.findIndex(function (e) {
+    //敵の3を封じる
+    for (var _j = 0, box_10 = box; _j < box_10.length; _j++) {
+      var elm = box_10[_j];
+      var i_11 = elm[0],
+        j_11 = elm[1];
+      var field = structuredClone(__classPrivateFieldGet(this, _GomokuNarabe_field, "f"));
+      field[i_11][j_11] = this.getOpponentTurn();
+      var gsa = this.getStoneArray(i_11, j_11, field, this.getOpponentTurn());
+      var idx = gsa.counts.findIndex(function (e) {
+        return e == 2;
+      });
+      if (idx >= 0 && gsa.noneEnds[idx] == 2) {
+        return [i_11 - 1, j_11 - 1];
+      }
+    }
+    var _loop_4 = function _loop_4(elm) {
+      var i_12 = elm[0],
+        j_12 = elm[1];
+      var field = structuredClone(__classPrivateFieldGet(this_4, _GomokuNarabe_field, "f"));
+      field[i_12][j_12] = this_4.turn;
+      var gsa = this_4.getStoneArray(i_12, j_12, field, this_4.turn);
+      var idx = gsa.counts.findIndex(function (e) {
         return e == 1;
       });
-      var idx3 = gsa.counts.findIndex(function (e, i) {
-        return e == 1 && i > idx2;
+      var idx2 = gsa.counts.findIndex(function (e, i) {
+        return e == 1 && i > idx;
       });
-      if (idx2 >= 0 && gsa.noneEnds[idx2] == 2 && idx3 >= 0 && gsa.noneEnds[idx3] == 2) {
+      var idx3 = gsa.counts.findIndex(function (e) {
+        return e == 2;
+      });
+      if (idx >= 0 && gsa.noneEnds[idx] == 2 && idx3 >= 0 && gsa.noneEnds[idx3] == 1) {
         return {
-          value: [i_11 - 1, j_11 - 1]
+          value: [i_12 - 1, j_12 - 1]
+        };
+      }
+      if (idx >= 0 && gsa.noneEnds[idx] == 2 && idx2 >= 0 && gsa.noneEnds[idx2] == 2) {
+        return {
+          value: [i_12 - 1, j_12 - 1]
         };
       }
     };
-    var this_1 = this;
-    for (var _t = 0, box_10 = box; _t < box_10.length; _t++) {
-      var elm = box_10[_t];
-      var state_1 = _loop_1(elm);
-      if (_typeof(state_1) === "object") return state_1.value;
+    var this_4 = this;
+    //22,32を作る
+    for (var _k = 0, box_11 = box; _k < box_11.length; _k++) {
+      var elm = box_11[_k];
+      var state_4 = _loop_4(elm);
+      if (_typeof(state_4) === "object") return state_4.value;
     }
+    //上記すべてに当てはまらない場合に空いているマスにテキトウに打つ
     var midIndex = Math.floor(box.length / 2);
-    var _u = [box[midIndex][0], box[midIndex][1]],
-      i = _u[0],
-      j = _u[1];
+    var _l = box[midIndex],
+      i = _l[0],
+      j = _l[1];
     return [i - 1, j - 1];
   };
   //横方向、縦方向、斜め方向×2　の４方向について同種の石が連続している数およびその両端が空マスである数を計算してリストにして返す。
@@ -11564,7 +11626,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55876" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59003" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -98,7 +98,7 @@ export class GomokuNarabe {
                 }
             }
         }
-
+        //置くとそのまま勝つ所があるならそこに置く
         for (let elm of box) {
             let [i, j] = elm;
             let field = structuredClone(this.#field);
@@ -109,7 +109,7 @@ export class GomokuNarabe {
                 return [i - 1, j - 1];
             }
         }
-
+        //置かれると負ける所があるならそこに置く
         for (let elm of box) {
             let [i, j] = elm;
             let field = structuredClone(this.#field);
@@ -122,6 +122,7 @@ export class GomokuNarabe {
             }
         }
 
+        //両端が空いた４連を作る
         for (let elm of box) {
             let [i, j] = elm;
             let field = structuredClone(this.#field);
@@ -133,6 +134,7 @@ export class GomokuNarabe {
             }
         }
 
+        //4-3,4-4を作る
         for (let elm of box) {
             let [i, j] = elm;
             let field = structuredClone(this.#field);
@@ -140,6 +142,7 @@ export class GomokuNarabe {
             const gsa = this.getStoneArray(i, j, field, this.turn);
             let idx = gsa.counts.findIndex((e) => e === 3);
             let idx2 = gsa.counts.findIndex((e) => e === 2);
+            let idx3 = gsa.counts.findIndex((e, i) => e === 3 && i > idx);
             if (
                 idx >= 0 &&
                 gsa.noneEnds[idx] == 1 &&
@@ -148,8 +151,17 @@ export class GomokuNarabe {
             ) {
                 return [i - 1, j - 1];
             }
+            if (
+                idx >= 0 &&
+                gsa.noneEnds[idx] == 1 &&
+                idx3 >= 0 &&
+                gsa.noneEnds[idx3] == 1
+            ) {
+                return [i - 1, j - 1];
+            }
         }
 
+        //片方空いた4連を50%の確率作る。
         for (let elm of box) {
             let [i, j] = elm;
             let field = structuredClone(this.#field);
@@ -175,7 +187,7 @@ export class GomokuNarabe {
                 return [i - 1, j - 1];
             }
         }
-        //相手の4-3を封じる
+        //相手の4-3,4-4を封じる
         for (let elm of box) {
             let [i, j] = elm;
             let field = structuredClone(this.#field);
@@ -183,6 +195,7 @@ export class GomokuNarabe {
             const gsa = this.getStoneArray(i, j, field, this.getOpponentTurn());
             let idx = gsa.counts.findIndex((e) => e == 3);
             let idx2 = gsa.counts.findIndex((e) => e == 2);
+            let idx3 = gsa.counts.findIndex((e, i) => e === 3 && i > idx);
             if (
                 idx >= 0 &&
                 gsa.noneEnds[idx] == 1 &&
@@ -191,8 +204,36 @@ export class GomokuNarabe {
             ) {
                 return [i - 1, j - 1];
             }
+            if (
+                idx >= 0 &&
+                gsa.noneEnds[idx] == 1 &&
+                idx3 >= 0 &&
+                gsa.noneEnds[idx3] == 1
+            ) {
+                return [i - 1, j - 1];
+            }
         }
 
+        //3-3を作る
+        for (let elm of box) {
+            let [i, j] = elm;
+            let field = structuredClone(this.#field);
+            field[i][j] = this.turn;
+            const gsa = this.getStoneArray(i, j, field, this.turn);
+
+            let idx = gsa.counts.findIndex((e) => e == 2);
+            let idx2 = gsa.counts.findIndex((e, i) => e == 2 && i > idx);
+            if (
+                idx >= 0 &&
+                gsa.noneEnds[idx] == 2 &&
+                idx2 >= 0 &&
+                gsa.noneEnds[idx2] == 2
+            ) {
+                return [i - 1, j - 1];
+            }
+        }
+
+        //3を作る
         for (let elm of box) {
             let [i, j] = elm;
             let field = structuredClone(this.#field);
@@ -205,6 +246,7 @@ export class GomokuNarabe {
             }
         }
 
+        //敵の3を封じる
         for (let elm of box) {
             let [i, j] = elm;
             let field = structuredClone(this.#field);
@@ -217,18 +259,28 @@ export class GomokuNarabe {
             }
         }
 
+        //22,32を作る
         for (let elm of box) {
             let [i, j] = elm;
             let field = structuredClone(this.#field);
             field[i][j] = this.turn;
             const gsa = this.getStoneArray(i, j, field, this.turn);
-            let idx2 = gsa.counts.findIndex((e) => e == 1);
-            let idx3 = gsa.counts.findIndex((e, i) => e == 1 && i > idx2);
+            let idx = gsa.counts.findIndex((e) => e == 1);
+            let idx2 = gsa.counts.findIndex((e, i) => e == 1 && i > idx);
+            let idx3 = gsa.counts.findIndex((e) => e == 2);
             if (
-                idx2 >= 0 &&
-                gsa.noneEnds[idx2] == 2 &&
+                idx >= 0 &&
+                gsa.noneEnds[idx] == 2 &&
                 idx3 >= 0 &&
-                gsa.noneEnds[idx3] == 2
+                gsa.noneEnds[idx3] == 1
+            ) {
+                return [i - 1, j - 1];
+            }
+            if (
+                idx >= 0 &&
+                gsa.noneEnds[idx] == 2 &&
+                idx2 >= 0 &&
+                gsa.noneEnds[idx2] == 2
             ) {
                 return [i - 1, j - 1];
             }
