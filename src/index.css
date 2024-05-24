@@ -4,6 +4,10 @@ body {
     background-color: rgb(251, 251, 238);
 }
 
+h1 {
+    font-family: serif;
+}
+
 button {
     cursor: pointer;
 }
